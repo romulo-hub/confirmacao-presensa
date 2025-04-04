@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import styles from "../styles/Confirmacao.module.css"; // Importando CSS do componente
 
