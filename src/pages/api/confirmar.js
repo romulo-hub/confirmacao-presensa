@@ -28,12 +28,14 @@ export default function ConfirmarPresenca() {
         />
         <br />
         <br />
+
         <label>
           <input
             type="radio"
             name="presenca"
             value="sim"
             onChange={() => setPresenca("sim")}
+            required
           />{" "}
           Sim
         </label>
@@ -43,12 +45,16 @@ export default function ConfirmarPresenca() {
             name="presenca"
             value="nao"
             onChange={() => setPresenca("nao")}
+            required
           />{" "}
           Não
         </label>
         <br />
         <br />
-        <button type="submit">Enviar</button>
+
+        <button type="submit" disabled={!nome.trim() || !presenca}>
+          Enviar
+        </button>
       </form>
     </div>
   );
