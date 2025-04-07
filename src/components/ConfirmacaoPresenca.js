@@ -26,7 +26,7 @@ export default function ConfirmacaoPresenca() {
         alt="Aniversariante"
         className={styles.foto}
       />
-      <h1 className={styles.titulo}>Festa de 1 Ano do João</h1>
+      <h1 className={styles.titulo}>Festa de 1 Ano ds Melinda</h1>
       <p className={styles.info}>📅 Data: 20 de Abril de 2025</p>
       <p className={styles.info}>📍 Local: Rua Exemplo, 123 - São Paulo</p>
       <p className={styles.info}>⏰ Horário: 16h00</p>
