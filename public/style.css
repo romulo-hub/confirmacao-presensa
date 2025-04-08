@@ -50,12 +50,21 @@ body {
 
 .foto {
   width: 100%;
-  height: auto;
-  max-width: 100%;
-  object-fit: contain;
-  border-radius: 1rem;
+  max-width: 350px;
+  border-radius: 1.5rem;
+  margin-bottom: 1rem;
+  object-fit: cover;
   display: block;
-  margin: 0 auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Regras para celular (até 480px de largura) */
+@media (max-width: 480px) {
+  .foto {
+    max-width: 100%;
+    height: auto;
+  }
 }
 
 h1 {
