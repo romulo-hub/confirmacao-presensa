@@ -1,0 +1,141 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Arial", sans-serif;
+  background-color: #000;
+  color: white;
+  overflow-x: hidden;
+}
+
+/* Fundo com confetes */
+.fundo-animado {
+  position: relative;
+  min-height: 100vh;
+  background: url("confete.gif") repeat;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow: hidden;
+}
+
+/* Bloco rosa */
+.card {
+  background-color: #ffc0cb;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+  z-index: 2;
+}
+
+.foto {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #8b005d;
+}
+
+p {
+  margin: 10px 0;
+  color: #333;
+  font-weight: bold;
+}
+
+input {
+  padding: 10px;
+  width: 100%;
+  margin-top: 20px;
+  border-radius: 5px;
+  border: none;
+  font-size: 16px;
+}
+
+.botoes {
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.sim {
+  background-color: #28a745;
+  color: white;
+}
+
+.nao {
+  background-color: #dc3545;
+  color: white;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+/* Balões animados subindo */
+.balao {
+  position: absolute;
+  bottom: -50px;
+  width: 30px;
+  height: 50px;
+  background: radial-gradient(circle, #ff69b4, #ff1493);
+  border-radius: 50% 50% 40% 40%;
+  animation: subir 8s linear;
+  z-index: 1;
+  opacity: 0.8;
+}
+
+@keyframes subir {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100vh);
+    opacity: 0;
+  }
+}
+
+/* Responsivo */
+@media (max-width: 480px) {
+  .card {
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+
+  p {
+    font-size: 14px;
+  }
+
+  button {
+    font-size: 14px;
+    width: 100%;
+  }
+}
