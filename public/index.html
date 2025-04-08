@@ -3,7 +3,7 @@
   <head>
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#ffc0cb" />
-    <link rel="apple-touch-icon" href="icon-192.pneg" />
+    <link rel="apple-touch-icon" href="icon-192.png" />
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,7 +15,7 @@
       <div class="card">
         <img
           src="foto-crianca.jpeg"
-          alt="So quer ser gente grande no celular"
+          alt="Só quer ser gente grande no celular"
           class="foto"
           loading="lazy"
         />
@@ -35,21 +35,43 @@
           <button class="sim">✅ Sim, eu vou!</button>
           <button class="nao">❌ Não poderei ir</button>
         </div>
+
+        <!-- Botão e áudio da música -->
+        <button id="botaoMusica">🎶 Entrar na festa</button>
+        <audio
+          id="musicaFesta"
+          src="fico_assim_sem_voce.mp3"
+          preload="auto"
+        ></audio>
       </div>
     </div>
 
     <script src="animacao.js"></script>
+
     <script>
+      // Service Worker
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker
           .register("service-worker.js")
-          .then(function () {
-            console.log("Service Worker registrado com sucesso!");
-          })
-          .catch(function (error) {
-            console.log("Erro ao registrar Service Worker:", error);
-          });
+          .then(() => console.log("Service Worker registrado com sucesso!"))
+          .catch((error) =>
+            console.log("Erro ao registrar Service Worker:", error)
+          );
       }
+
+      // Música com clique
+      document.getElementById("botaoMusica").addEventListener("click", () => {
+        const musica = document.getElementById("musicaFesta");
+        musica
+          .play()
+          .then(() => {
+            console.log("Música tocando!");
+            document.getElementById("botaoMusica").style.display = "none";
+          })
+          .catch((error) => {
+            console.log("Erro ao tocar música:", error);
+          });
+      });
     </script>
   </body>
 </html>

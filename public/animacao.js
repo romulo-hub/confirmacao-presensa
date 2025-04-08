@@ -7,3 +7,14 @@ setInterval(() => {
 
   setTimeout(() => balao.remove(), 8000);
 }, 800);
+document.getElementById("botaoMusica").addEventListener("click", () => {
+  const musica = document.getElementById("musicaFesta");
+  musica
+    .play()
+    .then(() => {
+      console.log("Música tocando!");
+    })
+    .catch((error) => {
+      console.log("Erro ao tocar música:", error);
+    });
+});
