@@ -105,7 +105,7 @@ button:hover {
 
 /* Botão da música */
 #botaoMusica {
-  background-color: #ffc0cb; /* rosa claro */
+  background-color: #90ee90; /* verde claro */
   color: white;
   border: none;
   padding: 1rem 1.5rem;
@@ -118,7 +118,7 @@ button:hover {
 }
 
 #botaoMusica:hover {
-  background-color: #f8a9be; /* tom mais escuro ao passar o mouse */
+  background-color: #76d476; /* tom mais escuro ao passar o mouse */
 }
 
 /* Balões animados subindo */
