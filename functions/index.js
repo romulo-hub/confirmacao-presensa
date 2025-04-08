@@ -7,8 +7,26 @@ admin.initializeApp();
 const db = admin.firestore();
 
 const app = express();
-app.use(cors({ origin: true }));
-app.use(express.json()); // <-- necessário para req.body funcionar
+
+// ✅ CORS com múltiplas origens permitidas
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      const allowedOrigins = [
+        "http://localhost:3000",
+        "https://aniversariomelinda.netlify.app",
+      ];
+      // Permitir requisições sem origem (ex: servidores internos)
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+  })
+);
+
+app.use(express.json());
 
 app.post("/", async (req, res) => {
   const { nome, presenca } = req.body;
