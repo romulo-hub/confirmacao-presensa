@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Festa da Melinda 🎉</title>
+    <style>
+      body {
+        background-color: #1a1a1a;
+        color: white;
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .card {
+        background: #2c2c2c;
+        padding: 30px;
+        border-radius: 20px;
+        max-width: 400px;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      }
+
+      .foto {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid #3b82f6;
+        margin-bottom: 16px;
+      }
+
+      input {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #555;
+        background-color: black;
+        color: white;
+        margin-top: 12px;
+      }
+
+      .btn {
+        width: 100%;
+        padding: 12px;
+        margin-top: 10px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        color: white;
+      }
+
+      .btn-confirmar {
+        background-color: #22c55e;
+      }
+
+      .btn-confirmar:hover {
+        background-color: #16a34a;
+      }
+
+      .btn-nao {
+        background-color: #ef4444;
+      }
+
+      .btn-nao:hover {
+        background-color: #dc2626;
+      }
+
+      .mensagem {
+        margin-top: 16px;
+        font-size: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <img src="melinda.jpg" alt="Foto da Melinda" class="foto" />
+      <h1>Festa de 1 Ano da Melinda 🎉</h1>
+      <p>📅 Data: 20 de Abril de 2025</p>
+      <p>📍 Local: Rua Exemplo, 123 - São Paulo</p>
+      <p>⏰ Horário: 16h00</p>
+
+      <input type="text" id="nome" placeholder="Digite seu nome" />
+
+      <button class="btn btn-confirmar" onclick="enviarPresenca('sim')">
+        ✅ Sim, eu vou!
+      </button>
+      <button class="btn btn-nao" onclick="enviarPresenca('nao')">
+        ❌ Não poderei ir
+      </button>
+
+      <div class="mensagem" id="mensagem"></div>
+    </div>
+
+    <script>
+      async function enviarPresenca(presenca) {
+        const nome = document.getElementById("nome").value.trim();
+        const mensagem = document.getElementById("mensagem");
+
+        if (!nome) {
+          mensagem.textContent = "Por favor, digite seu nome.";
+          return;
+        }
+
+        mensagem.textContent = "Enviando...";
+
+        try {
+          const response = await fetch(
+            "https://us-central1-aniversario-melinda.cloudfunctions.net/confirmarPresenca",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ nome, presenca }),
+            }
+          );
+
+          const data = await response.json();
+
+          if (response.ok) {
+            mensagem.textContent =
+              presenca === "sim"
+                ? "🎉 Obrigado! Sua presença foi confirmada."
+                : "😔 Tudo bem! Sua ausência foi registrada.";
+            document.getElementById("nome").value = "";
+          } else {
+            mensagem.textContent = data.message || "Erro ao confirmar.";
+          }
+        } catch (error) {
+          mensagem.textContent = "Erro ao enviar confirmação.";
+        }
+      }
+    </script>
+  </body>
+</html>
