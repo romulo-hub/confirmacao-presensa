@@ -21,7 +21,7 @@
         />
         <h1>Festa de 1 Ano da Melinda 🎉</h1>
         <p>📅 Data: 14 de Junho de 2025</p>
-        <p>📍 Local: Rua Exemplo, 123 - Governador Valadares/MG</p>
+        <p>📍 Local: Rua Exemplo, 123 Governador Valadares/MG</p>
         <p>⏰ Horário: 16h00</p>
 
         <input
@@ -46,6 +46,7 @@
       </div>
     </div>
 
+    <!-- Scripts -->
     <script src="animacao.js"></script>
 
     <script>
@@ -71,6 +72,25 @@
           .catch((error) => {
             console.log("Erro ao tocar música:", error);
           });
+      });
+
+      // Captura de clique nos botões Sim e Não
+      document.querySelector(".sim").addEventListener("click", () => {
+        const nome = document.querySelector("input").value.trim();
+        if (!nome) {
+          alert("Por favor, digite seu nome antes de confirmar.");
+          return;
+        }
+        alert(`🎉 Obrigado, ${nome}! Sua presença foi confirmada!`);
+      });
+
+      document.querySelector(".nao").addEventListener("click", () => {
+        const nome = document.querySelector("input").value.trim();
+        if (!nome) {
+          alert("Por favor, digite seu nome antes de confirmar.");
+          return;
+        }
+        alert(`😢 Sentiremos sua falta, ${nome}.`);
       });
     </script>
   </body>
