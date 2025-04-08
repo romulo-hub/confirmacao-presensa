@@ -37,14 +37,15 @@ body {
   z-index: 2;
 }
 .card {
-  background-color: #fff;
-  padding: 1rem;
-  border-radius: 1.5rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: #ffc0cb; /* rosa claro */
+  padding: 1.5rem;
+  border-radius: 2rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   max-width: 400px;
-  width: 100%;
-  margin: 0 auto;
-  box-sizing: border-box;
+  width: 90%;
+  margin: 2rem auto;
+  text-align: center;
+  color: #000; /* texto preto para boa leitura */
 }
 
 .foto {
