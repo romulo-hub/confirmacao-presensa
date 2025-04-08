@@ -1,32 +1,48 @@
 "use client";
 
 import { useState } from "react";
-import styles from "../styles/Confirmacao.module.css"; // Importando CSS do componente
+import styles from "../styles/Confirmacao.module.css"; // CSS do componente
 
 export default function ConfirmacaoPresenca() {
   const [nome, setNome] = useState("");
   const [presenca, setPresenca] = useState(null);
+  const [mensagem, setMensagem] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch("/api/confirmar", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nome, presenca }),
-    });
 
-    if (response.ok) alert("Presença registrada!");
-    else alert("Erro ao registrar.");
+    try {
+      const response = await fetch(
+        "https://us-central1-aniversario-melinda.cloudfunctions.net/confirmarPresenca",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ nome, presenca }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setMensagem(data.message || "Presença registrada com sucesso!");
+        setNome("");
+        setPresenca(null);
+      } else {
+        setMensagem("Erro ao registrar presença.");
+      }
+    } catch (error) {
+      setMensagem("Erro ao conectar com o servidor.");
+    }
   };
 
   return (
     <div className={styles.container}>
       <img
-        src="/foto_crianca.jpg" // Adicione a imagem da criança na pasta public/
+        src="/foto_crianca.jpg"
         alt="Aniversariante"
         className={styles.foto}
       />
-      <h1 className={styles.titulo}>Festa de 1 Ano ds Melinda</h1>
+      <h1 className={styles.titulo}>Festa de 1 Ano da Melinda 🎉</h1>
       <p className={styles.info}>📅 Data: 20 de Abril de 2025</p>
       <p className={styles.info}>📍 Local: Rua Exemplo, 123 - São Paulo</p>
       <p className={styles.info}>⏰ Horário: 16h00</p>
@@ -47,6 +63,7 @@ export default function ConfirmacaoPresenca() {
               type="radio"
               name="presenca"
               value="sim"
+              checked={presenca === "sim"}
               onChange={() => setPresenca("sim")}
             />
             Sim
@@ -56,6 +73,7 @@ export default function ConfirmacaoPresenca() {
               type="radio"
               name="presenca"
               value="nao"
+              checked={presenca === "nao"}
               onChange={() => setPresenca("nao")}
             />
             Não
@@ -70,6 +88,8 @@ export default function ConfirmacaoPresenca() {
           Confirmar Presença
         </button>
       </form>
+
+      {mensagem && <p className={styles.mensagem}>{mensagem}</p>}
     </div>
   );
 }
