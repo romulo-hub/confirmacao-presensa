@@ -40,10 +40,11 @@ body {
 .foto {
   width: 100%;
   height: auto;
-  max-height: 200px;
-  object-fit: cover;
-  border-radius: 10px;
-  margin-bottom: 20px;
+  max-height: 300px; /* ou o tamanho desejado */
+  object-fit: cover; /* ou 'contain' para encaixar toda a imagem */
+  border-radius: 1rem;
+  display: block;
+  margin: 0 auto;
 }
 
 h1 {
