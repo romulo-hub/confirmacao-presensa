@@ -1,4 +1,4 @@
-// Balões subindo aleatoriamente na tela
+// Animação de balões subindo
 setInterval(() => {
   const balao = document.createElement("div");
   balao.classList.add("balao");
