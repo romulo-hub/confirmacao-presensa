@@ -1,83 +1,82 @@
 import { useState } from "react";
-import { salvarConfirmacao } from "../firebase/functions";
+import axios from "axios";
 
 export default function ConfirmacaoPresenca() {
   const [nome, setNome] = useState("");
-  const [comparecera, setComparecera] = useState(null);
-  const [confirmado, setConfirmado] = useState(false);
+  const [presenca, setPresenca] = useState("");
   const [mensagem, setMensagem] = useState("");
+  const [enviado, setEnviado] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!nome || comparecera === null) {
-      alert("Por favor, preencha seu nome e selecione se irá comparecer.");
+    if (!nome || !presenca) {
+      setMensagem("Por favor, preencha todos os campos.");
       return;
     }
 
-    await salvarConfirmacao({ nome, comparecera });
-    setConfirmado(true);
-    setMensagem(
-      comparecera
-        ? "Obrigado por confirmar sua presença! 🎉"
-        : "Lamentamos que você não possa comparecer 😢"
-    );
+    try {
+      await axios.post(
+        "https://us-central1-aniversario-melinda.cloudfunctions.net/confirmarPresenca",
+        { nome, presenca }
+      );
+      setMensagem(
+        presenca === "Sim"
+          ? "Presença confirmada! Obrigado por vir 🎉"
+          : "Confirmado que não poderá comparecer. Sentiremos sua falta ❤️"
+      );
+      setEnviado(true);
+    } catch (error) {
+      console.error("Erro ao enviar confirmação:", error);
+      setMensagem("Ocorreu um erro. Tente novamente mais tarde.");
+    }
   };
 
   return (
-    <div className="bg-gray-800 text-white p-8 rounded-2xl shadow-lg w-full max-w-md mx-auto text-center mt-10">
-      <img
-        src="/melinda.jpg"
-        alt="Foto da Melinda"
-        className="w-32 h-32 object-cover rounded-full mx-auto border-4 border-blue-500"
-      />
-      <h1 className="text-2xl font-bold mt-4">Festa de 1 Ano da Melinda 🎉</h1>
-      <p className="mt-2">📅 Data: 20 de Abril de 2025</p>
-      <p>📍 Local: Rua Exemplo, 123 - São Paulo</p>
-      <p>⏰ Horário: 16h00</p>
-
-      {!confirmado ? (
-        <form onSubmit={handleSubmit} className="mt-6">
+    <div className="max-w-md mx-auto p-6 bg-gray-900 text-white rounded-2xl shadow-lg mt-6">
+      <h2 className="text-2xl font-bold mb-4 text-center">
+        Confirme sua presença 🎈
+      </h2>
+      {!enviado ? (
+        <form onSubmit={handleSubmit}>
           <input
             type="text"
             placeholder="Digite seu nome"
             value={nome}
             onChange={(e) => setNome(e.target.value)}
-            className="w-full p-2 rounded-lg text-black mb-4"
+            className="w-full p-2 rounded mb-4 text-black"
           />
 
-          <div className="flex justify-center space-x-6 mb-4">
-            <label>
+          <div className="flex justify-around mb-4">
+            <label className="flex items-center space-x-2">
               <input
                 type="radio"
-                value="sim"
-                checked={comparecera === true}
-                onChange={() => setComparecera(true)}
-              />{" "}
-              Comparecerei
+                name="presenca"
+                value="Sim"
+                onChange={(e) => setPresenca(e.target.value)}
+              />
+              <span>Sim, vou 🥳</span>
             </label>
-            <label>
+            <label className="flex items-center space-x-2">
               <input
                 type="radio"
-                value="nao"
-                checked={comparecera === false}
-                onChange={() => setComparecera(false)}
-              />{" "}
-              Não poderei ir
+                name="presenca"
+                value="Não"
+                onChange={(e) => setPresenca(e.target.value)}
+              />
+              <span>Não poderei 😢</span>
             </label>
           </div>
 
           <button
             type="submit"
-            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
+            className="w-full bg-pink-500 text-white py-2 rounded hover:bg-pink-600 transition"
           >
-            {comparecera === false
-              ? "Confirmar que não poderá ir"
-              : "Confirmar Presença"}
+            Enviar Confirmação
           </button>
         </form>
       ) : (
-        <p className="mt-4 font-bold text-green-400">{mensagem}</p>
+        <p className="text-center mt-4">{mensagem}</p>
       )}
     </div>
   );
