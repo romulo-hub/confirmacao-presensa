@@ -1,6 +1,6 @@
 // src/app/page.js
-import AnimacaoConvite from "../components/AnimacaoConvite";
-import ConfirmacaoPresenca from "../components/ConfirmacaoPresenca";
+import AnimacaoConvite from "../pages/components/AnimacaoConvite";
+import ConfirmacaoPresenca from "../pages/components/AnimacaoConvite";
 
 export default function Home() {
   return (
