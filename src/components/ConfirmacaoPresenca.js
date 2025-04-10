@@ -1,85 +1,51 @@
+// src/components/AnimacaoConvite.js
 "use client";
 
-import { useState } from "react";
-import axios from "axios";
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
 
-export default function ConfirmacaoPresenca() {
-  const [nome, setNome] = useState("");
-  const [presenca, setPresenca] = useState("");
-  const [mensagem, setMensagem] = useState("");
-  const [enviado, setEnviado] = useState(false);
+export default function AnimacaoConvite() {
+  const containerRef = useRef(null);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    const tl = gsap.timeline({ defaults: { ease: "power1.out" } });
 
-    if (!nome || !presenca) {
-      setMensagem("Por favor, preencha todos os campos.");
-      return;
-    }
-
-    try {
-      await axios.post(
-        "https://us-central1-aniversario-melinda.cloudfunctions.net/confirmarPresenca",
-        { nome, presenca }
-      );
-      setMensagem(
-        presenca === "Sim"
-          ? "Presença confirmada! Obrigado por vir 🎉"
-          : "Confirmado que não poderá comparecer. Sentiremos sua falta ❤️"
-      );
-      setEnviado(true);
-    } catch (error) {
-      console.error("Erro ao enviar confirmação:", error);
-      setMensagem("Ocorreu um erro. Tente novamente mais tarde.");
-    }
-  };
+    // Exemplo: animação de entrada por baixo de um arco
+    tl.from(".arco", { y: 200, opacity: 0, duration: 1 });
+    // Exemplo: animação de borboletas se movendo
+    gsap.to(".borboleta", {
+      x: 100,
+      duration: 3,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut",
+    });
+    // Animações de transição dos textos
+    tl.from(".mensagem", { x: -100, opacity: 0, duration: 1 }, "-=0.5");
+    // Simula movimento de câmera: pode usar deslocamento do container ou elementos
+    tl.to(containerRef.current, { x: -50, duration: 1, ease: "power1.inOut" });
+    // Volta de ré ao final
+    tl.to(containerRef.current, { x: 0, duration: 1, ease: "power1.inOut" });
+  }, []);
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-gray-900 text-white rounded-2xl shadow-lg mt-6">
-      <h2 className="text-2xl font-bold mb-4 text-center">
-        Confirme sua presença 🎈
-      </h2>
-      {!enviado ? (
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            placeholder="Digite seu nome"
-            value={nome}
-            onChange={(e) => setNome(e.target.value)}
-            className="w-full p-2 rounded mb-4 text-black"
-          />
-
-          <div className="flex justify-around mb-4">
-            <label className="flex items-center space-x-2">
-              <input
-                type="radio"
-                name="presenca"
-                value="Sim"
-                onChange={(e) => setPresenca(e.target.value)}
-              />
-              <span>Sim, vou 🥳</span>
-            </label>
-            <label className="flex items-center space-x-2">
-              <input
-                type="radio"
-                name="presenca"
-                value="Não"
-                onChange={(e) => setPresenca(e.target.value)}
-              />
-              <span>Não poderei 😢</span>
-            </label>
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-pink-500 text-white py-2 rounded hover:bg-pink-600 transition"
-          >
-            Enviar Confirmação
-          </button>
-        </form>
-      ) : (
-        <p className="text-center mt-4">{mensagem}</p>
-      )}
+    <div ref={containerRef} className="animacao-container">
+      {/* Elemento do arco */}
+      <div className="arco">Convite Especial</div>
+      {/* Elementos das borboletas */}
+      <div
+        className="borboleta"
+        style={{ position: "absolute", top: 10, left: 50 }}
+      >
+        🦋
+      </div>
+      <div
+        className="borboleta"
+        style={{ position: "absolute", top: 30, left: 150 }}
+      >
+        🦋
+      </div>
+      {/* Outros elementos que se animam podem ser adicionados */}
     </div>
   );
 }

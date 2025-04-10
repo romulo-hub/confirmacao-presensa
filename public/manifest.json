@@ -1,11 +1,11 @@
 {
-  "name": "Aniversário da Melinda 🎉",
+  "name": "Festa da Melinda 🎉",
   "short_name": "Melinda 1 Ano",
-  "start_url": "index.html",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#ffc0cb",
   "theme_color": "#ffc0cb",
-  "orientation": "portrait",
+  "description": "Confirmação de presença para o aniversário da Melinda",
   "icons": [
     {
       "src": "icon-192.png",

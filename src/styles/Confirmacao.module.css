@@ -1,132 +1,26 @@
-.container {
-  text-align: center;
-  padding: 20px;
-  background-color: #f8f9fa;
-  color: #333;
-  font-family: "Arial", sans-serif;
-  border-radius: 10px;
-  max-width: 500px;
-  margin: 20px auto;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-}
+/* globals.css ou o módulo que preferir */
 
-.foto {
-  border-radius: 50%;
-  width: 150px;
-  height: 150px;
-  object-fit: cover;
-  border: 4px solid #007bff;
-  margin-bottom: 10px;
-
-  .card {
-    background-color: #ffc0cb; /* Rosa clarinho */
-    border-radius: 20px;
-    padding: 30px;
-    color: #000;
-    position: relative;
-    z-index: 1;
-  }
-}
-
-.titulo {
-  font-size: 22px;
-  font-weight: bold;
-}
-
-.info {
-  font-size: 16px;
-  margin: 5px 0;
-}
-
-.icone {
-  font-size: 18px;
-  margin-right: 5px;
-}
-
-.form {
-  margin-top: 15px;
-}
-
-.input {
-  width: 80%;
-  padding: 8px;
-  margin-bottom: 10px;
-  border: 2px solid #007bff;
-  border-radius: 5px;
-  font-size: 16px;
-}
-
-.radioGroup {
-  margin: 10px 0;
-}
-
-.radioLabel {
-  font-size: 16px;
-  margin: 0 10px;
-  cursor: pointer;
-}
-
-.botao {
-  background-color: #007bff;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.botao:hover {
-  background-color: #0056b3;
-}
-
-.botao:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-.animacao {
-  position: fixed;
+/* Estilização geral para o efeito dinâmico */
+.animacao-container {
+  position: absolute;
   width: 100%;
   height: 100%;
-  overflow: hidden;
-  z-index: 0;
+  top: 0;
+  left: 0;
   pointer-events: none;
 }
 
-.balao,
-.confete {
+.arco {
   position: absolute;
-  top: -100px;
-  width: 30px;
-  height: 40px;
-  opacity: 0.8;
-  animation: cair 6s infinite;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2rem;
+  font-weight: bold;
+  color: #ff69b4;
 }
 
-.balao {
-  background: radial-gradient(circle, #ffb6c1 0%, #ff69b4 100%);
-  border-radius: 50% 50% 45% 45%;
-  left: calc(10% + 80% * var(--i));
-  animation-delay: calc(1s * var(--i));
-}
-
-.confete {
-  background: repeating-linear-gradient(
-    45deg,
-    #ff0,
-    #ff0 2px,
-    #f0f 2px,
-    #f0f 4px
-  );
-  width: 10px;
-  height: 20px;
-  left: calc(10% + 80% * var(--i));
-  animation-delay: calc(1.5s * var(--i));
-}
-
-@keyframes cair {
-  to {
-    transform: translateY(110vh) rotate(360deg);
-  }
+/* Exemplo de estilo para as borboletas */
+.borboleta {
+  font-size: 2rem;
 }

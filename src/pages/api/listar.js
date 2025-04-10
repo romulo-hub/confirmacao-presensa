@@ -22,13 +22,23 @@ const analytics = getAnalytics(app);
 const db = getFirestore(app);
 
 // Função para lidar com a requisição e retornar os dados da coleção "presencas"
-export default async function handler(req, res) {
+
+export async function POST(request) {
   try {
-    const snapshot = await getDocs(collection(db, "presencas"));
-    const lista = snapshot.docs.map((doc) => doc.data());
-    res.status(200).json(lista);
+    const { nome, presenca } = await request.json();
+    await addDoc(collection(db, "presencas"), {
+      nome,
+      presenca,
+      data: serverTimestamp(),
+    });
+    return new Response(JSON.stringify({ message: "Presença registrada!" }), {
+      status: 200,
+    });
   } catch (error) {
-    console.error("Erro ao buscar dados do Firestore:", error);
-    res.status(500).json({ error: "Erro interno do servidor" });
+    console.error("Erro ao salvar:", error);
+    return new Response(
+      JSON.stringify({ error: "Erro ao registrar presença." }),
+      { status: 500 }
+    );
   }
 }
