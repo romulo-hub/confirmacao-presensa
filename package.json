@@ -19,9 +19,10 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@rushstack/eslint-patch": "^1.11.0",
     "@tailwindcss/postcss": "^4",
-    "eslint": "^9",
-    "eslint-config-next": "15.2.4",
+    "eslint": "^9.24.0",
+    "eslint-config-next": "^15.3.0",
     "tailwindcss": "^4"
   }
 }

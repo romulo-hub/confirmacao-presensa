@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
   <head>
+    <!-- Manifesto do PWA -->
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#ffc0cb" />
     <link rel="apple-touch-icon" href="icon-192.png" />
+
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Festa da Melinda 🎉</title>
+
+    <!-- Estilos do site -->
     <link rel="stylesheet" href="style.css" />
-
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"></script>
   </head>
-
   <body>
+    <!-- Conteúdo principal: exemplo de convite -->
     <div class="fundo-animado">
       <div class="card">
         <img
           src="foto-crianca.jpeg"
-          alt="Só quer ser gente grande no celular"
+          alt="Foto do bebê"
           class="foto"
           loading="lazy"
         />
@@ -33,59 +33,105 @@
           placeholder="Digite seu nome"
           inputmode="text"
           autocomplete="name"
+          id="nomeConvidado"
         />
 
         <div class="botoes">
-          <button class="sim">✅ Sim, eu vou!</button>
-          <button class="nao">❌ Não poderei ir</button>
+          <button class="botao-sim">✅ Sim, eu vou!</button>
+          <button class="botao-nao">❌ Não poderei ir</button>
         </div>
 
-        <!-- Botão e áudio da música -->
+        <!-- Botão e áudio para iniciar a música -->
         <button id="botaoMusica">🎶 Entrar na festa</button>
-        <audio
-          id="musicaFesta"
-          src="fico_assim_sem_voce.mp3"
-          preload="auto"
-        ></audio>
+        <audio id="musicaFesta" src="musica.mp3" preload="auto"></audio>
       </div>
     </div>
 
+    <!-- Script de animação, se necessário -->
     <script src="animacao.js"></script>
 
+    <!-- Registro do Service Worker -->
     <script>
-      // Configuração do Firebase
-      const firebaseConfig = {
-        apiKey: "AIzaSyAnhrtpLXEGxS6eZdTU1I9Q8WeKNIljo34",
-        authDomain: "aniversario-melinda.firebaseapp.com",
-        projectId: "aniversario-melinda",
-        storageBucket: "aniversario-melinda.appspot.com", // 🔹 Corrigido!
-        messagingSenderId: "573530545668",
-        appId: "1:573530545668:web:f4adc9088d286ccc6f9f51",
-        measurementId: "G-HDMZPBY92T",
-      };
-
-      // Inicializa Firebase
-      const app = firebase.initializeApp(firebaseConfig);
-      const database = firebase.database(app);
-
-      // Service Worker (registro de SW já dentro do body)
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", () => {
           navigator.serviceWorker
             .register("/service-worker.js")
             .then((registration) => {
-              console.log(
-                "Service Worker registrado com sucesso:",
-                registration
-              );
+              console.log("Service Worker registrado:", registration);
             })
             .catch((error) => {
               console.log("Erro ao registrar Service Worker:", error);
             });
         });
       }
+    </script>
 
-      // Música com clique
+    <!-- Script para integração com Firebase e eventos dos botões -->
+    <script type="module">
+      // Importa os módulos do Firebase Firestore via ESModule
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+      import {
+        getFirestore,
+        collection,
+        addDoc,
+        serverTimestamp,
+      } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
+
+      // Substitua os valores abaixo com as informações reais do seu projeto Firebase:
+      const firebaseConfig = {
+        apiKey: "AIzaSyAnhrtpLXEGxS6eZdTU1I9Q8WeKNIljo34",
+        authDomain: "aniversario-melinda.firebaseapp.com",
+        projectId: "aniversario-melinda",
+        storageBucket: "aniversario-melinda.firebasestorage.app",
+        messagingSenderId: "573530545668",
+        appId: "1:573530545668:web:f4adc9088d286ccc6f9f51",
+        measurementId: "G-HDMZPBY92T",
+      };
+
+      // Inicializa o Firebase e o Firestore
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      // Função para salvar as confirmações no Firestore
+      async function salvarConfirmacao(nome, resposta) {
+        try {
+          await addDoc(collection(db, "confirmacoes"), {
+            nome,
+            presenca: resposta,
+            data: serverTimestamp(),
+          });
+          if (resposta === "sim") {
+            alert(`🎉 Obrigado, ${nome}! Sua presença foi confirmada!`);
+          } else {
+            alert(`😢 Sentiremos sua falta, ${nome}.`);
+          }
+        } catch (error) {
+          console.error("Erro ao salvar:", error);
+          alert("❌ Ocorreu um erro ao registrar sua resposta.");
+        }
+      }
+
+      // Evento para o botão "Sim, eu vou!"
+      document.querySelector(".botao-sim").addEventListener("click", () => {
+        const nome = document.getElementById("nomeConvidado").value.trim();
+        if (!nome) {
+          alert("Por favor, digite seu nome antes de confirmar.");
+          return;
+        }
+        salvarConfirmacao(nome, "sim");
+      });
+
+      // Evento para o botão "Não poderei ir"
+      document.querySelector(".botao-nao").addEventListener("click", () => {
+        const nome = document.getElementById("nomeConvidado").value.trim();
+        if (!nome) {
+          alert("Por favor, digite seu nome antes de confirmar.");
+          return;
+        }
+        salvarConfirmacao(nome, "nao");
+      });
+
+      // Evento para o botão de música
       document.getElementById("botaoMusica").addEventListener("click", () => {
         const musica = document.getElementById("musicaFesta");
         musica
@@ -95,58 +141,6 @@
           })
           .catch((error) => {
             console.log("Erro ao tocar música:", error);
-          });
-      });
-
-      // Botão SIM
-      document.querySelector(".sim").addEventListener("click", () => {
-        const nome = document.querySelector("input").value.trim();
-        if (!nome) {
-          alert("Por favor, digite seu nome antes de confirmar.");
-          return;
-        }
-
-        const dados = {
-          nome: nome,
-          resposta: "sim",
-          timestamp: new Date().toISOString(),
-        };
-
-        database
-          .ref("confirmacoes")
-          .push(dados)
-          .then(() => {
-            alert(`🎉 Obrigado, ${nome}! Sua presença foi confirmada!`);
-          })
-          .catch((error) => {
-            console.error("Erro ao salvar:", error);
-            alert("❌ Ocorreu um erro. Tente novamente.");
-          });
-      });
-
-      // Botão NÃO
-      document.querySelector(".nao").addEventListener("click", () => {
-        const nome = document.querySelector("input").value.trim();
-        if (!nome) {
-          alert("Por favor, digite seu nome antes de confirmar.");
-          return;
-        }
-
-        const dados = {
-          nome: nome,
-          resposta: "nao",
-          timestamp: new Date().toISOString(),
-        };
-
-        database
-          .ref("confirmacoes")
-          .push(dados)
-          .then(() => {
-            alert(`😢 Sentiremos sua falta, ${nome}.`);
-          })
-          .catch((error) => {
-            console.error("Erro ao salvar:", error);
-            alert("❌ Ocorreu um erro. Tente novamente.");
           });
       });
     </script>
