@@ -1,60 +1,78 @@
 import { useState } from "react";
 import { db } from "../firebase/firebaseConfig";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, Timestamp } from "firebase/firestore";
 
 export default function RSVPForm() {
   const [nome, setNome] = useState("");
-  const [confirmado, setConfirmado] = useState(null);
+  const [presenca, setPresenca] = useState(null);
+  const [enviado, setEnviado] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!nome || confirmado === null) return alert("Preencha todos os campos!");
 
-    await addDoc(collection(db, "confirmacoes"), {
-      nome,
-      confirmado,
-      data: new Date(),
-    });
+    if (!nome || presenca === null) {
+      alert("Preencha seu nome e escolha Sim ou Não.");
+      return;
+    }
 
-    alert("Confirmação registrada! Obrigado 💖");
-    setNome("");
-    setConfirmado(null);
+    try {
+      await addDoc(collection(db, "confirmacoes"), {
+        nome,
+        presenca: presenca ? "sim" : "nao",
+        data: Timestamp.now(),
+      });
+
+      setEnviado(true);
+    } catch (err) {
+      console.error("Erro ao enviar:", err);
+      alert("Erro ao enviar confirmação.");
+    }
   };
 
+  if (enviado) {
+    return (
+      <div className="bg-green-100 border border-green-300 text-green-700 p-4 rounded mt-4">
+        Obrigado pela confirmação! 💖
+      </div>
+    );
+  }
+
   return (
-    <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4">
       <input
         type="text"
         placeholder="Seu nome"
+        className="w-full border rounded px-4 py-2"
         value={nome}
         onChange={(e) => setNome(e.target.value)}
-        className="border p-2 rounded w-full"
       />
+
       <div className="flex justify-around">
         <button
           type="button"
           className={`px-6 py-2 rounded-full border ${
-            confirmado === true ? "bg-green-200" : ""
+            presenca === true ? "bg-green-300" : ""
           }`}
-          onClick={() => setConfirmado(true)}
+          onClick={() => setPresenca(true)}
         >
-          Confirmar
+          Sim
         </button>
         <button
           type="button"
           className={`px-6 py-2 rounded-full border ${
-            confirmado === false ? "bg-red-200" : ""
+            presenca === false ? "bg-red-300" : ""
           }`}
-          onClick={() => setConfirmado(false)}
+          onClick={() => setPresenca(false)}
         >
-          Não vou
+          Não
         </button>
       </div>
+
       <button
         type="submit"
-        className="bg-purple-600 text-white px-4 py-2 rounded w-full"
+        className="w-full bg-purple-600 text-white py-2 rounded"
       >
-        Enviar
+        Confirmar Presença
       </button>
     </form>
   );
